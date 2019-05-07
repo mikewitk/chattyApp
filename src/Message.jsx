@@ -8,10 +8,9 @@ class Message extends Component {
 
     const content = this.props.messageContent;
     const username = this.props.messageUser;
-    const id = this.props.messageID;
-
+    
 		return (
-			<div className="message" key={id}>
+			<div className="message">
         <span className='message-username'>{username}</span>
 				<span className='message-content'>{content}</span>
 				</div>

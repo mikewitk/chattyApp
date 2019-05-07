@@ -7,6 +7,7 @@ import NavBar from './NavBar.jsx';
 class App extends Component {
   constructor() {
     super();
+    this.addMessage = this.addMessage.bind(this);
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [
@@ -24,6 +25,17 @@ class App extends Component {
     }
   }
 
+
+  addMessage(messageText, nameOfUser) {
+    const oldMessages = this.state.messages;
+    const newMessages = [...oldMessages, {
+      username: nameOfUser,
+      content: messageText,
+      id: "532"
+    }];
+    this.setState({ messages: newMessages })
+  }
+
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -37,12 +49,14 @@ class App extends Component {
     }, 3000);
   }
 
+  
+
   render() {
     return (
       <div>
         <NavBar />
         <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name}/>
+        <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage}/>
       </div>
     );
   }
