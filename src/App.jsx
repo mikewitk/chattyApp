@@ -4,46 +4,50 @@ import MessageList from './MessageList.jsx';
 import NavBar from './NavBar.jsx';
 
 
+
 class App extends Component {
   constructor() {
     super();
     this.addMessage = this.addMessage.bind(this);
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: [
-        {
-          username: "Bob",
-          content: "Has anyone seen my marbles?",
-          id: '123'
-        },
-        {
-          username: "Anonymous",
-          content: "No, I think you lost them. You lost your marbles Bob. You lost them for good.",
-          id: '345'
-        }
-      ]
+      messages: []
     }
+    this.connection = new WebSocket('ws://localhost:3001/')
   }
 
 
+  
+
+
   addMessage(messageText, nameOfUser) {
-    const oldMessages = this.state.messages;
-    const newMessages = [...oldMessages, {
+    const newMessages = {
       username: nameOfUser,
-      content: messageText,
-      id: this.state.messages.length + 1
-    }];
-    this.setState({ messages: newMessages })
+      content: messageText
+    };
+    this.connection.send(JSON.stringify(newMessages));
+    console.log("Message sent")
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
 
-    const connection = new WebSocket('ws://localhost:3001/')
-
-    connection.onopen = function (event) {
+    this.connection.onopen = function (event) {
       console.log("Connected to server")
-      connection.send("Here's some text that the server is urgently awaiting!"); 
+    };
+
+    this.connection.onmessage = (event) => {
+      console.log("Message from server: ",JSON.parse(event.data));
+      const parsedData = JSON.parse(event.data);
+      const oldMessages = this.state.messages;
+      const newObj = {};
+      newObj.content = parsedData.content;
+      newObj.username = parsedData.username;
+      newObj.id = parsedData.id;
+      console.log("This is newObj: ", newObj);
+      const newMessages = [...oldMessages, newObj]
+      this.setState({ messages: newMessages })
+      // console.log("I received the message");
     };
 
     setTimeout(() => {
