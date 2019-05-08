@@ -31,13 +31,21 @@ class App extends Component {
     const newMessages = [...oldMessages, {
       username: nameOfUser,
       content: messageText,
-      id: "532"
+      id: this.state.messages.length + 1
     }];
     this.setState({ messages: newMessages })
   }
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+
+    const connection = new WebSocket('ws://localhost:3001/')
+
+    connection.onopen = function (event) {
+      console.log("Connected to server")
+      connection.send("Here's some text that the server is urgently awaiting!"); 
+    };
+
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
@@ -61,4 +69,5 @@ class App extends Component {
     );
   }
 }
+
 export default App;
