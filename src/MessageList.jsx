@@ -2,15 +2,9 @@ import React, {Component} from 'react';
 import Message from './Message.jsx';
 
 class MessageList extends Component {
-  
-		
-		
-
-	render () {
-
-		const messagesArr = this.props.messages;
-		const MessageItems = messagesArr.map( (message) => {
-			return ( <Message messageContent={message.content} messageUser={message.username} key={message.id}/> )
+  	render () {
+		const MessageItems = this.props.messages.map(message => {
+			return ( <Message messageContent={message.content} messageUser={message.username.name} key={message.id}/> )
 		});
 
 		return (
