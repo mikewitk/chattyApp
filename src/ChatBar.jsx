@@ -11,7 +11,9 @@ class ChatBar extends Component {
             e.currentTarget.value = "";
             break;
           case 'usernameField':
+            const info = `${this.props.currentUser} changed their name to ${newInput}`
             this.props.nameChange(newInput);
+            this.props.addNotification(info)
             break;
           default:
             console.warn('I don\'t know wha to do with this', newInput, e.currentTarget.name);

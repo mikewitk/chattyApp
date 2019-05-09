@@ -15,12 +15,23 @@ class App extends Component {
     this.connection = new WebSocket('ws://localhost:3001/');
   }
 
-  addMessage = (messageText) => {
-    this.connection.send(JSON.stringify({
-      username: this.state.currentUser,
-      content: messageText
-    }));
+  addNotification = (messageText) => {
+    this.connection.send( JSON.stringify(
+      {type: "postNotification",
+      content: messageText}
+    ))
   }
+
+  addMessage = (messageText) => {
+    this.connection.send( JSON.stringify( 
+      { username: this.state.currentUser, 
+        content: messageText,
+        type: "postMessage"
+      } ) 
+    );
+  }
+
+  
 
   nameChange = (newName) => {
     this.setState({ currentUser: { name: newName } });
@@ -29,12 +40,13 @@ class App extends Component {
   componentDidMount() {
     console.log("componentDidMount <App />");
 
-    this.connection.onopen = function (event) {
+
+    this.connection.onopen = ( event ) => {
       console.log("Connected to server")
     };
 
-    this.connection.onmessage = (event) => {
-      this.setState({ messages: this.state.messages.concat(JSON.parse(event.data)) })
+    this.connection.onmessage = ( event ) => {
+      this.setState( { messages: this.state.messages.concat( JSON.parse( event.data ) ) } )
     };
   }
 
@@ -42,8 +54,8 @@ class App extends Component {
     return (
       <div>
         <NavBar />
-        <MessageList messages={this.state.messages} />
-        <ChatBar currentUser={this.state.currentUser.name} addMessage={this.addMessage} nameChange={this.nameChange}/>
+        <MessageList messages={ this.state.messages } />
+        <ChatBar currentUser={ this.state.currentUser.name } addNotification={this.addNotification} addMessage={ this.addMessage } nameChange={ this.nameChange }/>
       </div>
     );
   }
