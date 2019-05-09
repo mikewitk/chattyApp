@@ -10,7 +10,8 @@ class App extends Component {
     super();
     this.state = {
       currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
-      messages: []
+      messages: [],
+      usersOnline: 0
     }
     this.connection = new WebSocket('ws://localhost:3001/');
   }
@@ -46,14 +47,21 @@ class App extends Component {
     };
 
     this.connection.onmessage = ( event ) => {
-      this.setState( { messages: this.state.messages.concat( JSON.parse( event.data ) ) } )
-    };
-  }
+      let dataObj = JSON.parse( event.data )
+      console.log("This is event.data: ", dataObj)
+        if ( dataObj.type === "usersOnline") {
+          this.setState( { usersOnline: dataObj.number } )
+          console.log("Usersonline State: ", this.state.usersOnline)
+        } else {
+          console.log("If I am not there then I am here")
+          this.setState( { messages: this.state.messages.concat( JSON.parse( event.data ) ) } ) 
+        }
+  } }
 
   render() {
     return (
       <div>
-        <NavBar />
+        <NavBar usersOnline={this.state.usersOnline}/>
         <MessageList messages={ this.state.messages } />
         <ChatBar currentUser={ this.state.currentUser.name } addNotification={this.addNotification} addMessage={ this.addMessage } nameChange={ this.nameChange }/>
       </div>
