@@ -5,15 +5,15 @@ class ChatBar extends Component {
     const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
         const newInput = e.currentTarget.value;
-        switch (e.currentTarget.name) {
+        switch ( e.currentTarget.name ) {
           case 'messageBar':
-            this.props.addMessage(newInput);
+            this.props.addMessage( newInput );
             e.currentTarget.value = "";
             break;
           case 'usernameField':
             const info = `${this.props.currentUser} changed their name to ${newInput}`
-            this.props.nameChange(newInput);
-            this.props.addNotification(info)
+            this.props.nameChange( newInput );
+            this.props.addNotification( info ) 
             break;
           default:
             console.warn('I don\'t know wha to do with this', newInput, e.currentTarget.name);
@@ -26,14 +26,14 @@ class ChatBar extends Component {
       <footer className="chatbar">
         <input 
           className="chatbar-username" 
-          defaultValue={this.props.currentUser}
+          defaultValue={ this.props.currentUser }
           name="usernameField"
-          onKeyDown={handleKeyDown}
+          onKeyDown={ handleKeyDown }
           placeholder="Your Name (Optional)" />
         <input 
           className="chatbar-message" 
           name="messageBar" 
-          onKeyDown={handleKeyDown}  
+          onKeyDown={ handleKeyDown }  
           placeholder="Type a message and hit ENTER" />
       </footer>
     )

@@ -2,18 +2,15 @@ import React, {Component} from 'react';
 
 class Message extends Component {
 	render () {
-    const content = this.props.messageContent;
-		const username = this.props.messageUser;
-		const type = this.props.messageType;
 
-			if ( type === "postMessage") {
+			if ( this.props.messageType === "postMessage") {
 				return ( <div className="message">
-									<span className='message-username'>{username}</span>
-									<span className='message-content'>{content}</span>
+									<span className='message-username'>{ this.props.messageUser }</span>
+									<span className='message-content'>{ this.props.messageContent }</span>
 								</div> )
 			} else {
-				return ( <div className="notification">
-									<span className="notification-content">{content}</span>
+				return ( <div className="message system">
+									{ this.props.messageContent }
 								</div> ) }
 	}
 }

@@ -3,57 +3,54 @@ import ChatBar from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
 import NavBar from './NavBar.jsx';
 
-
-
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      currentUser: {name: "Bob"}, // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: { name: "Bob" }, // optional. if currentUser is not defined, it means the user is Anonymous
       messages: [],
       usersOnline: 0
     }
-    this.connection = new WebSocket('ws://localhost:3001/');
+    this.connection = new WebSocket( 'ws://localhost:3001/' );
   }
 
-  addNotification = (messageText) => {
-    this.connection.send( JSON.stringify(
-      {type: "postNotification",
-      content: messageText}
+  //  When the user changes its name, a notification will be sent to every user in the app
+  addNotification = ( messageText ) => {
+    this.connection.send( JSON.stringify (
+      { type: "postNotification",
+      content: messageText }
     ))
   }
 
-  addMessage = (messageText) => {
-    this.connection.send( JSON.stringify( 
+  // When the user sends a message, it will be rendered to every user in the app
+  addMessage = ( messageText ) => {
+    this.connection.send( JSON.stringify ( 
       { username: this.state.currentUser, 
         content: messageText,
         type: "postMessage"
       } ) 
     );
   }
-
   
-
-  nameChange = (newName) => {
-    this.setState({ currentUser: { name: newName } });
+  // Function that updates the user name
+  nameChange = ( newName ) => {
+    this.setState( { currentUser: { name: newName } } );
   }
 
   componentDidMount() {
-    console.log("componentDidMount <App />");
+    console.log( "componentDidMount <App />" );
 
 
     this.connection.onopen = ( event ) => {
-      console.log("Connected to server")
+      console.log( "Connected to server" )
     };
 
+    // Event listener to decide whether to set state of messages/notifications or update the number of users
     this.connection.onmessage = ( event ) => {
       let dataObj = JSON.parse( event.data )
-      console.log("This is event.data: ", dataObj)
-        if ( dataObj.type === "usersOnline") {
+        if ( dataObj.type === "usersOnline" ) {
           this.setState( { usersOnline: dataObj.number } )
-          console.log("Usersonline State: ", this.state.usersOnline)
         } else {
-          console.log("If I am not there then I am here")
           this.setState( { messages: this.state.messages.concat( JSON.parse( event.data ) ) } ) 
         }
   } }
@@ -61,9 +58,9 @@ class App extends Component {
   render() {
     return (
       <div>
-        <NavBar usersOnline={this.state.usersOnline}/>
+        <NavBar usersOnline={ this.state.usersOnline } />
         <MessageList messages={ this.state.messages } />
-        <ChatBar currentUser={ this.state.currentUser.name } addNotification={this.addNotification} addMessage={ this.addMessage } nameChange={ this.nameChange }/>
+        <ChatBar currentUser={ this.state.currentUser.name } addNotification={ this.addNotification } addMessage={ this.addMessage } nameChange={ this.nameChange } />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:400,400italic,700");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/normalize/4.2.0/normalize.min.css");
 
+
 h1 {
   color: tomato;
 }
@@ -94,5 +95,7 @@ body {
 .navbar div {
  float: right;
  font-size: 20px;
+ font-style: bold;
  margin-top: 25px;
 }
+
