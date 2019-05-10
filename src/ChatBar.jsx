@@ -16,7 +16,7 @@ class ChatBar extends Component {
             this.props.addNotification( info ) 
             break;
           default:
-            console.warn('I don\'t know wha to do with this', newInput, e.currentTarget.name);
+            console.warn('I don\'t know what to do with this', newInput, e.currentTarget.name);
             break;
         }
       }
